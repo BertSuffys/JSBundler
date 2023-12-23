@@ -114,7 +114,7 @@ function bundle(){
     const removeLogs = document.getElementById("removeLogs").checked;
 
     /* Perform filders */
-   // allContent = addSemicolons(allContent)
+    allContent = addSemicolons(allContent)
     allContent = removeComments ? this.removeComments(allContent) : allContent;
     allContent = removeLogs ? this.removeLogs(allContent) : allContent;
     allContent = removeWhitelines ? this.removeWhitelines(allContent) : allContent;
@@ -141,13 +141,6 @@ function removeLogs(content){
 
 
 function addSemicolons(content) {
-  const regex = /\b\w+\([^;()]*\)(?![;\s,)]|\s*[\w\)])\b/g;
-   content = content.replace(regex, match => {
-    if (match.includes('(')) {
-      return match;
-    } else {
-      return `${match};`;
-    }
-  });
-  return content;
+  const regex = /\b\w+\([^;()]*\)(?![;\s,])/g;
+  return content.replace(regex, match => `${match};`);
 }
