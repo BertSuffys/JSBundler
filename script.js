@@ -56,7 +56,6 @@ function writeFile(file) {
 
 
 
-
 /**
  * Reforms the fileList from the multiselect to an actual array
  */
@@ -85,7 +84,6 @@ function copy(){
  * Updates the UI 
  */
 function drawUI(){
-    /* List selected files */
     let names = "";
     for (let [name, fileContent] of fileNameContentMap.entries()) {
         names += name + ", "
@@ -97,13 +95,6 @@ function drawUI(){
     countElement.innerText = '(' + fileNameContentMap.size + ')';
 }
 
-
-/**
- * Gets all concattenated JS from all loaded files
- */
-function getAllCode(){
-
-}
 
 
 /**
@@ -117,11 +108,13 @@ function bundle(){
         allContent += fileContent + '\n\n';
     }
 
+    /* Check checkboxes */
     const removeWhitelines = document.getElementById("removeWhitelines").checked;
     const removeComments = document.getElementById("removeComments").checked;
     const removeLogs = document.getElementById("removeLogs").checked;
 
-
+    /* Perform filders */
+   // allContent = addSemicolons(allContent)
     allContent = removeComments ? this.removeComments(allContent) : allContent;
     allContent = removeLogs ? this.removeLogs(allContent) : allContent;
     allContent = removeWhitelines ? this.removeWhitelines(allContent) : allContent;
@@ -145,3 +138,16 @@ function removeLogs(content){
     return content.replace(/console\.log\([^\)]*\);?/g, '');
 }
 
+
+
+function addSemicolons(content) {
+  const regex = /\b\w+\([^;()]*\)(?![;\s,)]|\s*[\w\)])\b/g;
+   content = content.replace(regex, match => {
+    if (match.includes('(')) {
+      return match;
+    } else {
+      return `${match};`;
+    }
+  });
+  return content;
+}
