@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>JS Bundler</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <main>
+    <!-- Header -->
+    <div id="header" class="flex">
+      <h1 style="width: fit-content;">JS Bundler</h1>
+    </div>
+
+    <div id="wrapper">
+      <!-- Panel  -->
+      <div id="panel">
+        <label for="fileInput" id="selectButton">Select Files</label>
+        <input type="file" multiple id="fileInput" onchange="handleFileSelect(event)">
+        <p><span id="fileCount1">Files</span><span id="fileCount2">(0)</span><span id="fileCount3">:&nbsp;</span><span
+            id="fileCount4"></span></p>
+
+        <div id="fileList"></div>
+        <button onclick="bundle()">Bundle</button>
+        <button onclick="copy()">Copy</button>
+        <div class="flex" style="flex-direction: column; margin-top: 5px;">
+          <div>
+            <input id="removeWhitelines" type="checkbox"><label>Remove whitelines</label>
+          </div>
+          <div>
+            <input id="removeComments" type="checkbox"><label>Remove comments</label>
+          </div>
+          <div>
+            <input id="removeLogs" type="checkbox"><label>Remove console logs</label>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- Output  -->
+      <div id="bundledJS">
+        nothing here...
+      </div>
+    </div>
+
+
+  </main>
+  <script src="./script.js"></script>
+</body>
+
+</html>

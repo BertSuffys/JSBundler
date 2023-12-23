@@ -1,0 +1,47 @@
+#header{
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+
+.flex{
+    display: flex;
+}
+
+
+body {
+    background-color: rgb(230, 226, 225);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    color: #1c1d1e;
+  }
+
+  #fileCount1, #fileCount2, #fileCount3{
+    font-weight: bold;
+  }
+
+
+  #bundledJS{
+    background-color: rgb(194, 195, 196);
+    min-height: 500px;
+    width: 100%;
+    border-radius:5px;
+    padding: 10px;
+    border: 1px solid rgb(112, 112, 114);
+  }
+
+  #panel{
+    margin-bottom: 5px;
+    background-color: rgb(194, 195, 196);
+    padding: 10px;
+    width: 100%;
+    border-radius:5px;
+    border: 1px solid rgb(112, 112, 114);
+  }
+
+
+  #wrapper{
+    margin: 5px;
+    min-width: 800px;
+    max-width: fit-content;
+  }
