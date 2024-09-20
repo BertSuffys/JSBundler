@@ -120,21 +120,24 @@ function bundle() {
     var bundledJSPanel = document.getElementById("bundledJS");
     let allContent = '';
 
-    for(let fileName of dependenciesSortedBundledMap){
+    for (let fileName of dependenciesSortedBundledMap) {
         allContent += bundledMap.get(fileName) + '\n\n';
     }
-  
+
 
     /* Check checkboxes */
     const removeWhitelines = document.getElementById("removeWhitelines").checked;
     const removeComments = document.getElementById("removeComments").checked;
     const removeLogs = document.getElementById("removeLogs").checked;
+    const wrap_const = (document.getElementById("wrap-const").checked && document.getElementById("wrap-const-name").value != null && document.getElementById("wrap-const-name").value != "");
+    const wrap_const_name = wrap_const ? document.getElementById("wrap-const-name").value : null;
 
     /* Perform filders */
     //allContent = addSemicolons(allContent)
     allContent = removeComments ? this.removeComments(allContent) : allContent;
     allContent = removeLogs ? this.removeLogs(allContent) : allContent;
     allContent = removeWhitelines ? this.removeWhitelines(allContent) : allContent;
+    allContent = wrap_const ? this.wrap_content(allContent, wrap_const_name) : allContent;
 
     bundledJSPanel.innerText = allContent
 }
@@ -155,14 +158,18 @@ function removeLogs(content) {
     return content.replace(/console\.log\([^\)]*\);?/g, '');
 }
 
-
-
 function addSemicolons(content) {
     const regex = /\b\w+\([^;()]*\)(?![;\s,])/g;
     return content.replace(regex, match => `${match};`);
 }
 
-
+/**
+ * wraps the bundles javascript in a single constant with a provided name.
+ */
+function wrap_content(content, const_name) {
+    console.warn("wrap_content is not yet implemented")
+    return content;
+}
 
 /**
 * Structures the files so that all dependencies are ordered correctly
