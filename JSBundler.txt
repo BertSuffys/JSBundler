@@ -1,3 +1,4 @@
 -> The JSBundler should still firstly perform a dependency check to find out which files depend on which.
 -> semicolon inserter where theyre missing
 -> Optional minifier?
+-> Optional terms of agreement file loading from a .txt file?
