@@ -294,49 +294,73 @@ function parseClasses(content) {
 }
 
 function configureDependencies() {
-    // Graph creation 
-    let graph = new Map();
-    let maxPopularity = 0;
-    for (let [filename, content] of bundledMap) {
-        let dependencies = []
-        let popularity = 0;
-        for (let [innerFileName, innerContent] of bundledMap) {
-            if (content.includes(getNameFromFileName(innerFileName)) && filename !== innerFileName) {
-                dependencies.push(innerFileName)
-                popularity++;
+    const graph = new Map();
+
+    // Initialize graph
+    for (let [filename] of bundledMap) {
+        graph.set(filename, new Set());
+    }
+
+    // Detect dependencies
+    for (let [filename, rawContent] of bundledMap) {
+
+        const content = removeComments(rawContent);
+        const currentName = getNameFromFileName(filename);
+
+        for (let [innerFilename] of bundledMap) {
+
+            if (filename === innerFilename) continue; // <-- already prevents direct same file
+
+            const dependencyName = getNameFromFileName(innerFilename);
+
+            // 🔥 NEW: ignore if same symbol name
+            if (dependencyName === currentName) continue;
+
+            const regex = new RegExp(`\\b${dependencyName}\\b`, "g");
+
+            if (regex.test(content)) {
+                graph.get(filename).add(innerFilename);
             }
         }
-        // Find start node
-        if (popularity > maxPopularity) {
-            startNodeKey = filename
-            maxPopularity = popularity
-        }
-        graph.set(filename, dependencies)
     }
-    // Build correctly configured map
-    let dependenciesList = []
-    for (let [filename, dependencies] of graph) {
-        dependenciesList.push([filename, dependencies])
-    }
+
     dependencyGraph = graph;
-    dependenciesSortedBundledMap = topologicalSort(dependenciesList);
+    dependenciesSortedBundledMap = topologicalSort(graph);
 }
 
 function topologicalSort(graph) {
     const visited = new Set();
+    const visiting = new Set();
     const result = [];
-    function dfs(node) {
-        if (visited.has(node)) return;
-        visited.add(node);
 
-        let next = graph.filter(it => it[0] == node)[0]
-        for (const dependency of next[1]) {
+    function dfs(node) {
+
+        // If already fully processed → skip
+        if (visited.has(node)) return;
+
+        // 🔥 If currently being processed → cycle detected
+        // DO NOT THROW — just stop traversing this branch
+        if (visiting.has(node)) {
+            return; // break cycle safely
+        }
+
+        visiting.add(node);
+
+        const dependencies = graph.get(node) || [];
+
+        for (const dependency of dependencies) {
+            if (dependency === node) continue; // ignore self-loop
             dfs(dependency);
         }
+
+        visiting.delete(node);
+        visited.add(node);
         result.push(node);
     }
-    for (const [node] of graph) {
+
+    for (const node of graph.keys()) {
         dfs(node);
     }
-    return result //.reverse();
+
+    return result;
 }
