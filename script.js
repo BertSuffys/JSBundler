@@ -121,9 +121,15 @@ function removeWhitelines(content) {
 }
 
 function removeComments(content) {
-    content = content.replace(/\/\*[\s\S]*?\*\//g, '');
-    content = content.replace(/\/\/.*(?:\r\n|\r|\n|$)/g, '');
-    return content;
+    return content.replace(
+        /("([^"\\]|\\.)*"|'([^'\\]|\\.)*'|`([^`\\]|\\.)*`)|\/\*[\s\S]*?\*\/|\/\/.*(?=[\n\r])/g,
+        function (match, quoted) {
+            // If this is a quoted string, return it unchanged
+            if (quoted) return quoted;
+            // Otherwise it's a comment — remove it
+            return '';
+        }
+    );
 }
 
 function removeLogs(content) {
